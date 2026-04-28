@@ -3,7 +3,6 @@
 
 Implementation of routing-guided graph anomaly detection on attributed networks.
 
-This repository only keeps the core implementation files needed to run the model. No datasets, checkpoints, logs, JSON files, NPZ files, figures, or experimental result files are included.
 
 ## File Structure
 
