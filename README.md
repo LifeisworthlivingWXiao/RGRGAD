@@ -1,6 +1,6 @@
 # RGRGAD
 
-A simplified implementation of routing-guided graph anomaly detection on attributed networks.
+Implementation of routing-guided graph anomaly detection on attributed networks.
 
 ## Environment
 
