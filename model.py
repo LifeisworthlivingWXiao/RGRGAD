@@ -130,7 +130,6 @@ class Model(nn.Module):
         else:
             context_c = self.readout_op(h_all[:, : -1, :], h_all[:, -2: -1, :])
 
-        # [新增接口] 把整个子图表示作为 subgraph embedding 用于 GRADATE 风格的对齐
         subgraph_embed = torch.mean(h_all[:, :-1, :], dim=1)
 
         logits_out = self.disc_model(context_c, node_interest_h)
