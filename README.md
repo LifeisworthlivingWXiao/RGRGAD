@@ -1,4 +1,4 @@
-````markdown
+
 # RGRGAD
 
 Implementation of routing-guided graph anomaly detection on attributed networks.
