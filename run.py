@@ -257,16 +257,10 @@ def main():
     print("Precomputing global feature similarity matrix...")
     with torch.no_grad():
         norm_raw_features = F.normalize(feat_data_tensor.squeeze(), p=2, dim=1)
-        # sim_matrix = torch.mm(norm_raw_features, norm_raw_features.t())
-        # 1. 先在 CPU 上计算这个巨大的 N x N 矩阵
         norm_raw_features_cpu = norm_raw_features.cpu()
         sim_matrix_cpu = torch.mm(norm_raw_features_cpu, norm_raw_features_cpu.t())
-
-        # 2. 如果后续代码强烈要求在 GPU 上运行，可以再放回去；
-        # 如果可以，建议后续直接在 CPU 上操作这个 sim_matrix
         sim_matrix = sim_matrix_cpu.to(norm_raw_features.device)
 
-        # 清理内存
         del norm_raw_features_cpu
         torch.cuda.empty_cache()
         sim_matrix = torch.clamp(sim_matrix, 0, 1)
@@ -371,7 +365,6 @@ def main():
                 batch_bce_loss_val = loss_dict["bce"].detach().item()
                 epoch_node_loss_buffer[indices] = loss_dict["bce_raw"][:current_batch_size].detach()
 
-                # [防显存泄漏 OOM 核心修复]
                 cur_loss_matrix[indices] = torch.cat((
                     loss_dict["bce_raw"][:current_batch_size].detach(),
                     loss_dict["bce_raw"][current_batch_size:].detach()
@@ -410,7 +403,6 @@ def main():
             prog_bar.set_postfix(bce_loss=f"{mean_epoch_bce:.4f}")
             prog_bar.update(1)
 
-            # [防显存泄漏 OOM 核心修复]
             if 'graph_v1' in locals():
                 del graph_v1, graph_v2, feature_v1, feature_v2, adj_v1, adj_v2
             torch.cuda.empty_cache()
