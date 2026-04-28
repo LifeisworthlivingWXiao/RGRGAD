@@ -79,9 +79,3 @@ ROC-AUC    : x.xxxx
 ====================================
 ```
 
-## Notes
-
-This release is intended for simple reproduction and code inspection. It does not save checkpoints, logs, JSON files, NPZ files, or figures by default.
-
-```
-```
