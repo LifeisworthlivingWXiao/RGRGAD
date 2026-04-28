@@ -159,13 +159,7 @@ def adj_to_dgl_graph(adj_matrix):
 
 
 def generate_rwr_subgraph(dgl_graph, required_size):
-    """
-    兼容新版本/旧版本 DGL 的简化子图采样：
-    - 以目标节点为中心
-    - 优先取 1-hop 邻居
-    - 不足时随机补齐
-    - 最后一个位置固定放目标节点
-    """
+
     try:
         num_nodes = dgl_graph.number_of_nodes()
     except Exception:
