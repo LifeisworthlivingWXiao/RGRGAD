@@ -51,7 +51,7 @@ Adjacency:  Network / A / adj
 
 ## Data Processing
 
-The data processing follows the common benchmark setting used in CoLA for graph anomaly detection. In this repository, the processed `.mat` files are directly placed in the `Data/` folder.
+The data processing follows the common benchmark setting used in CoLA for graph anomaly detection. The CoLA repository is available at: https://github.com/TrustAGI-Lab/CoLA. In this repository, the processed `.mat` files are directly placed in the `Data/` folder.
 
 During loading, the code applies the following operations:
 
