@@ -1,70 +1,34 @@
 # RGRGAD
 
-PyTorch implementation of **RGRGAD**, a routing-guided graph anomaly detection framework for attributed networks.
+## Get Started
 
-RGRGAD is designed for unsupervised node-level anomaly detection on attributed graphs. The method refines graph structure through routing-guided augmentation and learns anomaly-sensitive representations with contrastive subgraph modeling.
+This is the source code of **RGRGAD**, a routing-guided graph anomaly detection framework for attributed networks.
+The datasets are included in the `Data/` folder.
 
-## Overview
+RGRGAD performs unsupervised node-level anomaly detection by using routing-guided structural refinement, including redundancy pruning and neighbor completion, to construct informative graph views for contrastive learning.
 
-The main idea of RGRGAD is to use training dynamics and structural information to guide graph refinement during representation learning. The implementation contains the following components:
+## Code Structure
 
-- **Routing-guided structural refinement** for dynamically adjusting graph views.
-- **Redundancy pruning** for suppressing unreliable or redundant structural signals.
-- **Neighbor completion** for enriching insufficient local contexts of low-degree nodes.
-- **Routing gate** for estimating node-level routing confidence from pseudo anomaly scores and degree information.
-- **Contrastive subgraph learning** for unsupervised anomaly scoring.
+| File / Folder | Description |
+|:-------------:|:------------|
+| `Data` | Datasets in `.mat` format. |
+| `run.py` | Training and evaluation entry. |
+| `model.py` | GCN encoder, discriminator, and routing gate. |
+| `aug.py` | Redundancy pruning and neighbor completion. |
+| `utils.py` | Data loading, preprocessing, and subgraph sampling. |
 
-The code reports the final node-level anomaly detection performance using ROC-AUC.
+## Datasets
 
-## Repository Structure
+| **Dataset** | # Nodes | # Edges | # Attributes | # Anomalies |
+|:-----------:|:-------:|:-------:|:------------:|:-----------:|
+| **Cora** | 2,708 | 5,429 | 1,433 | 5.5% |
+| **Citeseer** | 3,327 | 4,732 | 3,703 | 4.5% |
+| **Pubmed** | 19,717 | 44,338 | 500 | 3.0% |
+| **ACM** | 16,484 | 71,980 | 8,337 | 3.6% |
+| **BlogCatalog** | 5,196 | 171,743 | 8,189 | 5.8% |
+| **Reddit** | 10,984 | 168,016 | 64 | 3.3% |
 
-```text
-RGRGAD/
-├── Data/
-│   ├── acm.mat
-│   ├── blogcatalog.mat
-│   ├── citeseer.mat
-│   ├── cora.mat
-│   ├── pubmed.mat
-│   └── reddit.mat
-├── aug.py        # Graph augmentation: redundancy pruning and neighbor completion
-├── model.py      # GCN encoder, discriminator, and routing gate
-├── run.py        # Training and evaluation entry point
-├── utils.py      # Data loading, preprocessing, and subgraph sampling utilities
-└── README.md
-```
-
-## Environment
-
-The code was tested with the following environment:
-
-```text
-Python 3.8.13
-PyTorch 1.12.1+cu113
-DGL 0.4.3
-NumPy 1.23.5
-SciPy 1.9.1
-scikit-learn 1.2.2
-torch-scatter 2.0.9
-tqdm 4.64.1
-```
-
-A typical environment can be created as follows:
-
-```bash
-conda create -n rgrgad python=3.8
-conda activate rgrgad
-```
-
-Install PyTorch, DGL, and `torch-scatter` according to your CUDA version. Then install the remaining dependencies:
-
-```bash
-pip install numpy==1.23.5 scipy==1.9.1 scikit-learn==1.2.2 tqdm==4.64.1
-```
-
-## Dataset
-
-All `.mat` dataset files should be placed under the `Data/` directory:
+The datasets should be organized as follows:
 
 ```text
 RGRGAD/
@@ -77,27 +41,23 @@ RGRGAD/
     └── reddit.mat
 ```
 
-The dataset name used in the command line should match the file name without the `.mat` suffix. For example, `--dataset cora` loads `Data/cora.mat`.
-
-The loader supports the following common `.mat` field names:
+The `.mat` files should contain node labels, node attributes, and the adjacency matrix. The loader supports the following field names:
 
 ```text
 Labels:     Label / gnd / label
-Features:   Attributes / X / attr
+Attributes: Attributes / X / attr
 Adjacency:  Network / A / adj
 ```
-
-Each `.mat` file should contain one label vector, one node attribute matrix, and one adjacency matrix. The labels are only used for final evaluation, not for supervised training.
 
 ## Usage
 
 Run RGRGAD on Cora:
 
 ```bash
-python run.py --dataset cora --data_dir ./Data
+python run.py --dataset cora --data_dir ./Data --lr 0.001 --train_epoch 100 --threshold 8 --alpha 0.2 --tau 0.07 --gpu_id 0
 ```
 
-Run RGRGAD on other datasets:
+Run RGRGAD on other datasets by changing the dataset name:
 
 ```bash
 python run.py --dataset acm --data_dir ./Data
@@ -107,33 +67,22 @@ python run.py --dataset pubmed --data_dir ./Data
 python run.py --dataset reddit --data_dir ./Data
 ```
 
-You can also specify the random seed and GPU id:
+## Requirements
 
-```bash
-python run.py --dataset cora --data_dir ./Data --seed 1 --gpu_id 0
-```
+This code requires the following:
 
-## Main Arguments
-
-| Argument | Description | Default |
-| --- | --- | --- |
-| `--dataset` | Dataset name without `.mat` suffix | `cora` |
-| `--data_dir` | Directory containing `.mat` datasets | `./Data` |
-| `--seed` | Random seed | `1` |
-| `--gpu_id` | GPU id | `0` |
-| `--train_epoch` | Number of training epochs | `100` |
-| `--test_rounds` | Number of test rounds for score averaging | `196` |
-| `--batch_size` | Batch size | `128` |
-| `--embedding_dim` | Hidden representation dimension | `64` |
-| `--threshold` | Degree threshold for structural refinement | `8` |
-| `--routing_mode` | Routing mode: `feat_only`, `feat_ano`, `feat_routing`, or `full` | `full` |
-| `--train_stage` | Augmentation stage: `pruning_only`, `completion_only`, or `staged` | `staged` |
-| `--amp` | Enable automatic mixed precision | Disabled |
-| `--fast_cuda` | Enable faster CUDA behavior with less deterministic settings | Disabled |
+- python>=3.8
+- pyTorch>=1.12.1
+- dgl<=0.4.3
+- numpy>=1.23.5
+- scipy>=1.9.1
+- scikit-learn>=1.2.2
+- torch-scatter>=2.0.9
+- tqdm>=4.64.1
 
 ## Output
 
-The program prints the training progress and final evaluation result in the terminal. A typical output is:
+The program reports the final node-level anomaly detection performance using ROC-AUC:
 
 ```text
 ====================================
@@ -146,18 +95,6 @@ ROC-AUC    : x.xxxx
 ====================================
 ```
 
-## Reproducibility Notes
-
-- The default setting uses one random seed specified by `--seed`.
-- For multiple-seed evaluation, run the script repeatedly with different seeds and report the mean and standard deviation.
-- The code uses the labels only when computing the final ROC-AUC score.
-- Dataset files should remain in the `Data/` directory to avoid path-related loading errors.
-- If CUDA memory is limited, reduce `--batch_size` or disable `--amp` depending on your environment.
-
-## Citation
+## Cite
 
 If this repository is useful for your research, please cite the corresponding paper when it becomes available.
-
-## Contact
-
-For questions about the implementation, please open an issue in this repository.
