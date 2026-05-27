@@ -76,7 +76,7 @@ def _resolve_data_dir(data_dir=None):
         if os.path.isdir(d):
             return d
 
-    raise FileNotFoundError(f"找不到数据目录，尝试过：{unique_dirs}")
+    raise FileNotFoundError(f"Dataset directory not found. Tried: {unique_dirs}")
 
 
 def _resolve_mat_path(base_dir, dataset_name):
@@ -97,7 +97,7 @@ def _resolve_mat_path(base_dir, dataset_name):
         if real_name.lower() == target_lower:
             return os.path.join(base_dir, real_name)
 
-    raise FileNotFoundError(f"在目录 {base_dir} 下找不到数据集 {dataset_name}.mat")
+    raise FileNotFoundError(f"Dataset file {dataset_name}.mat was not found under directory: {base_dir}")
 
 
 def load_mat(dataset_name, data_dir=None, train_rate=0.3, val_rate=0.1):
@@ -114,7 +114,7 @@ def load_mat(dataset_name, data_dir=None, train_rate=0.3, val_rate=0.1):
     elif 'label' in data_dict:
         class_labels = data_dict['label']
     else:
-        raise KeyError(f"{file_path} 中未找到标签字段（支持 Label / gnd / label）")
+        raise KeyError(f"No label field was found in {file_path}. Supported fields: Label / gnd / label")
 
     if 'Attributes' in data_dict:
         features_attr = data_dict['Attributes']
@@ -123,7 +123,7 @@ def load_mat(dataset_name, data_dir=None, train_rate=0.3, val_rate=0.1):
     elif 'attr' in data_dict:
         features_attr = data_dict['attr']
     else:
-        raise KeyError(f"{file_path} 中未找到属性字段（支持 Attributes / X / attr）")
+        raise KeyError(f"No attribute field was found in {file_path}. Supported fields: Attributes / X / attr")
 
     if 'Network' in data_dict:
         network_data = data_dict['Network']
@@ -132,7 +132,7 @@ def load_mat(dataset_name, data_dir=None, train_rate=0.3, val_rate=0.1):
     elif 'adj' in data_dict:
         network_data = data_dict['adj']
     else:
-        raise KeyError(f"{file_path} 中未找到邻接字段（支持 Network / A / adj）")
+        raise KeyError(f"No adjacency field was found in {file_path}. Supported fields: Network / A / adj")
 
     adj_mat = sp.csr_matrix(network_data)
 
