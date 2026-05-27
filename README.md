@@ -49,6 +49,18 @@ Attributes: Attributes / X / attr
 Adjacency:  Network / A / adj
 ```
 
+## Data Processing
+
+The data processing follows the common benchmark setting used in CoLA for graph anomaly detection. In this repository, the processed `.mat` files are directly placed in the `Data/` folder.
+
+During loading, the code applies the following operations:
+
+- The adjacency matrix is converted into a sparse CSR matrix and then into a DGL graph.
+- Node attributes are row-normalized before being fed into the model.
+- The adjacency matrix is symmetrically normalized and self-loops are added for graph convolution.
+- Local subgraphs are sampled around each target node for contrastive learning.
+- Node labels are not used during training and are only used for final ROC-AUC evaluation.
+
 ## Usage
 
 Run RGRGAD on Cora:
