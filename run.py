@@ -24,8 +24,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description='RGRGAD: Routing-Guided Refinement for Graph Anomaly Detection')
 
     parser.add_argument('--dataset', type=str, default='cora')
-    parser.add_argument('--data_dir', type=str, default='./Data', help='数据目录')
-    parser.add_argument('--exp_name', type=str, default='full_model', help='实验名称')
+    parser.add_argument('--data_dir', type=str, default='./Data', help='Dataset directory')
+    parser.add_argument('--exp_name', type=str, default='full_model', help='Experiment name')
 
     parser.add_argument('--lr', type=float, default=0.001)
     parser.add_argument('--seed', type=int, default=1)
