@@ -94,8 +94,8 @@ def degree_masking_with_threshold(adj_tensor, node_indices, sim_matrix, max_degr
 
 def get_routing_weight(anomaly_score):
     """
-    anomaly_score: [N]，值越大越异常
-    return: [N, N] 的路由权重矩阵
+    anomaly_score: [N], where larger values indicate more anomalous nodes.
+    return: [N, N] routing weight matrix.
     """
     score_col = anomaly_score.view(-1, 1)
     score_row = anomaly_score.view(1, -1)
@@ -166,7 +166,7 @@ def redundancy_pruning(dgl_graph, adj_dist, sim_matrix, features_input, node_deg
     mix_node_degree = th.LongTensor(mix_node_degree).to(device)
     mask_node_degree = th.LongTensor(mask_node_degree).to(device)
 
-    # 低度节点候选为空时，直接保留原边
+    # Keep the original edges when no low-degree node candidates are available.
     src_nodes, dst_nodes = dgl_graph.edges()
     src_nodes = src_nodes.to(device)
     dst_nodes = dst_nodes.to(device)
