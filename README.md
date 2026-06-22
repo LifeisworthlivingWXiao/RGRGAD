@@ -3,7 +3,9 @@
 ## Get Started
 
 This is the source code of **RGRGAD**, a routing-guided graph anomaly detection framework for attributed networks.
-The datasets are included in the `Data/` folder.
+
+> **CSV dataset download:** [Download `csvdata.zip` (27.5 MB)](https://github.com/LifeisworthlivingWXiao/RGRGAD/releases/download/dataset-v1.0/csvdata.zip)  
+> **Release page:** [dataset-v1.0](https://github.com/LifeisworthlivingWXiao/RGRGAD/releases/tag/dataset-v1.0)
 
 RGRGAD performs unsupervised node-level anomaly detection by using routing-guided structural refinement, including redundancy pruning and neighbor completion, to construct informative graph views for contrastive learning.
 
@@ -12,6 +14,7 @@ RGRGAD performs unsupervised node-level anomaly detection by using routing-guide
 | File / Folder | Description |
 |:-------------:|:------------|
 | `Data` | Datasets in `.mat` format. |
+| `datasets/README.md` | CSV dataset availability and format documentation. |
 | `run.py` | Training and evaluation entry. |
 | `model.py` | GCN encoder, discriminator, and routing gate. |
 | `aug.py` | Redundancy pruning and neighbor completion. |
@@ -28,7 +31,17 @@ RGRGAD performs unsupervised node-level anomaly detection by using routing-guide
 | **BlogCatalog** | 5,196 | 171,743 | 8,189 | 5.8% |
 | **Reddit** | 10,984 | 168,016 | 64 | 3.3% |
 
-The datasets should be organized as follows:
+### Human- and Machine-Readable CSV Data
+
+Human- and machine-readable CSV versions of all six benchmark datasets are provided in the GitHub Release:
+
+- [Download `csvdata.zip`](https://github.com/LifeisworthlivingWXiao/RGRGAD/releases/download/dataset-v1.0/csvdata.zip)
+- [View the `dataset-v1.0` release](https://github.com/LifeisworthlivingWXiao/RGRGAD/releases/tag/dataset-v1.0)
+- SHA-256: `ac1d7b911bdce3e81777b838600f796302be42e6f3e72bbf2e491ff80fcf84ed`
+
+The archive contains graph edge lists, node attribute matrices, node labels, metadata files, and README documentation. These CSV files correspond to the original MATLAB-format benchmark datasets and are provided for inspection, reuse, and reproducibility.
+
+The datasets should be organized as follows for model execution:
 
 ```text
 RGRGAD/
